@@ -1,0 +1,185 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:transparent}
+  .wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--color-border-tertiary)}
+  .panel{padding:20px;display:flex;flex-direction:column;gap:12px}
+  .panel-before{background:#f6f8fa}
+  .panel-after{background:#0d1117}
+  .label-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .label-before{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#666;padding:3px 10px;border-radius:20px;background:#e0e0e0}
+  .label-after{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3fb950;padding:3px 10px;border-radius:20px;background:rgba(63,185,80,.15);border:1px solid rgba(63,185,80,.3)}
+  /* BEFORE card styles */
+  .b-header{display:flex;align-items:center;gap:10px}
+  .b-avatar-empty{width:48px;height:48px;border-radius:50%;background:#d0d7de;display:flex;align-items:center;justify-content:center;font-size:20px;color:#8c959f;font-weight:700;flex-shrink:0}
+  .b-name{font-size:14px;font-weight:600;color:#24292f}
+  .b-username{font-size:12px;color:#8c959f}
+  .b-bio-empty{height:10px;background:#d0d7de;border-radius:4px;width:70%;margin-top:6px}
+  .b-meta{font-size:11px;color:#8c959f;display:flex;flex-direction:column;gap:4px}
+  .b-repos{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .b-repo{background:#fff;border:1px solid #d0d7de;border-radius:6px;padding:8px 10px}
+  .b-repo-name{font-size:12px;font-weight:600;color:#0969da;font-family:'JetBrains Mono',monospace}
+  .b-repo-desc{font-size:11px;color:#8c959f;margin-top:2px;font-style:italic}
+  .b-no-pins{font-size:11px;color:#8c959f;text-align:center;padding:10px;border:1px dashed #d0d7de;border-radius:6px;background:#fff}
+  /* AFTER card styles */
+  .a-header{display:flex;align-items:center;gap:10px}
+  .a-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#238636,#1f6feb);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid #30363d}
+  .a-name{font-size:14px;font-weight:600;color:#e6edf3}
+  .a-username{font-size:12px;color:#7d8590}
+  .a-bio{font-size:11px;color:#8b949e;margin-top:4px;line-height:1.4}
+  .a-meta{display:flex;flex-direction:column;gap:3px}
+  .a-meta-item{font-size:11px;color:#7d8590;display:flex;align-items:center;gap:5px}
+  .a-meta-dot{width:6px;height:6px;border-radius:50%;background:#3fb950;flex-shrink:0}
+  .a-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;margin-right:4px}
+  .a-badge-green{background:rgba(63,185,80,.15);color:#3fb950;border:1px solid rgba(63,185,80,.3)}
+  .a-badge-blue{background:rgba(31,111,235,.15);color:#58a6ff;border:1px solid rgba(31,111,235,.3)}
+  .a-badge-orange{background:rgba(210,153,34,.15);color:#d29922;border:1px solid rgba(210,153,34,.3)}
+  .a-repos{display:flex;flex-direction:column;gap:6px;margin-top:4px}
+  .a-repo{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:8px 10px}
+  .a-repo-name{font-size:12px;font-weight:600;color:#58a6ff;font-family:'JetBrains Mono',monospace}
+  .a-repo-desc{font-size:11px;color:#8b949e;margin-top:2px}
+  .a-repo-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
+  .a-tag{font-size:9px;padding:2px 6px;border-radius:20px;background:rgba(31,111,235,.1);color:#79c0ff;border:1px solid rgba(31,111,235,.2)}
+  .a-stat-row{display:flex;gap:6px;margin-top:2px}
+  .a-stat{font-size:10px;color:#3fb950;font-weight:600}
+  /* Diff rows */
+  .diff-table{width:100%;margin-top:8px}
+  .diff-row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--color-border-tertiary)}
+  .diff-cell{padding:8px 16px;font-size:12px}
+  .diff-head{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:6px 16px;color:var(--color-text-secondary);background:var(--color-background-secondary)}
+  .diff-before-cell{color:#cf222e;background:#fff5f5;display:flex;align-items:center;gap:6px}
+  .diff-after-cell{color:#1a7f37;background:#f0fff4;display:flex;align-items:center;gap:6px}
+  .diff-x{color:#cf222e;font-weight:700;font-size:14px}
+  .diff-check{color:#1a7f37;font-weight:700;font-size:14px}
+  .divider-label{grid-column:1/-1;background:var(--color-background-tertiary);text-align:center;padding:10px;font-size:12px;font-weight:600;color:var(--color-text-secondary);letter-spacing:.05em}
+</style>
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">GitHub profile before and after comparison showing the transformation from a bare profile to a professional one</h2>
+
+<div style="padding:0 0 16px">
+  <p style="font-size:13px;color:var(--color-text-secondary);text-align:center;margin-bottom:14px;font-weight:500;letter-spacing:.02em">THE GITHUB GLOW-UP</p>
+
+  <div class="wrap">
+    <!-- BEFORE -->
+    <div class="panel panel-before">
+      <div class="label-row"><span class="label-before">Before</span></div>
+
+      <div class="b-header">
+        <div class="b-avatar-empty">?</div>
+        <div>
+          <div class="b-name">dev-user-2022</div>
+          <div class="b-username">@dev-user-2022</div>
+          <div class="b-bio-empty"></div>
+        </div>
+      </div>
+
+      <div class="b-meta">
+        <span>📍 No location set</span>
+        <span>🔗 No links</span>
+        <span>📧 No email</span>
+      </div>
+
+      <div class="b-no-pins">No pinned repositories</div>
+
+      <div class="b-repos">
+        <div class="b-repo">
+          <div class="b-repo-name">project-1</div>
+          <div class="b-repo-desc">No description provided</div>
+        </div>
+        <div class="b-repo">
+          <div class="b-repo-name">untitled-ml</div>
+          <div class="b-repo-desc">No description provided</div>
+        </div>
+        <div class="b-repo">
+          <div class="b-repo-name">PIAIC-BATCH-67-</div>
+          <div class="b-repo-desc">No description provided</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #d0d7de;border-radius:6px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:#8c959f">Profile views: —</div>
+        <div style="font-size:10px;color:#d0d7de;margin-top:4px">No README · No stats · No story</div>
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="panel panel-after">
+      <div class="label-row"><span class="label-after">✓ After</span></div>
+
+      <div class="a-header">
+        <div class="a-avatar">AM</div>
+        <div>
+          <div class="a-name">Arman Adil Mangat</div>
+          <div class="a-username">@ArmanAdilMangat</div>
+          <div class="a-bio">AI/ML Engineer · Embedded AI · NLP · LLMs</div>
+        </div>
+      </div>
+
+      <div class="a-meta">
+        <div class="a-meta-item"><span class="a-meta-dot"></span><span style="color:#8b949e">📍 Lahore, Pakistan · GMT+5</span></div>
+        <div class="a-meta-item"><span class="a-meta-dot"></span><span style="color:#8b949e">🔗 LinkedIn · HuggingFace · Email</span></div>
+        <div style="margin-top:4px">
+          <span class="a-badge a-badge-green">✓ Available for hire</span>
+          <span class="a-badge a-badge-blue">Open to remote</span>
+        </div>
+      </div>
+
+      <div class="a-repos">
+        <div class="a-repo">
+          <div class="a-repo-name">GENIE</div>
+          <div class="a-repo-desc">Offline voice AI assistant on ESP32-S3 · no cloud</div>
+          <div class="a-repo-tags">
+            <span class="a-tag">esp32-s3</span><span class="a-tag">whisper</span><span class="a-tag">mistral-7b</span><span class="a-tag">ollama</span>
+          </div>
+          <div class="a-stat-row"><span class="a-stat">⚡ 8–15s latency · $22 hardware · 100% offline</span></div>
+        </div>
+        <div class="a-repo">
+          <div class="a-repo-name">BERT-AG-News-Classifier</div>
+          <div class="a-repo-desc">Fine-tuned BERT on AG News dataset</div>
+          <div class="a-repo-tags">
+            <span class="a-tag">bert</span><span class="a-tag">nlp</span><span class="a-tag">pytorch</span>
+          </div>
+          <div class="a-stat-row"><span class="a-stat">⚡ 94.74% accuracy · 94.75 macro F1</span></div>
+        </div>
+      </div>
+
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:10px;text-align:center">
+        <div style="font-size:11px;color:#3fb950;font-weight:600">Profile views: 21 this week</div>
+        <div style="font-size:10px;color:#7d8590;margin-top:4px">README live · Stats card · Story told</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIFF TABLE -->
+  <div class="diff-table" style="border:1px solid var(--color-border-tertiary);border-radius:0 0 12px 12px;overflow:hidden;margin-top:-1px">
+    <div class="diff-row">
+      <div class="diff-head">Before</div>
+      <div class="diff-head">After</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-before-cell"><span class="diff-x">✗</span> Default avatar / no photo</div>
+      <div class="diff-cell diff-after-cell"><span class="diff-check">✓</span> Professional headshot</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-before-cell"><span class="diff-x">✗</span> No bio or role</div>
+      <div class="diff-cell diff-after-cell"><span class="diff-check">✓</span> Role + specialization + availability</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-before-cell"><span class="diff-x">✗</span> No pinned repos</div>
+      <div class="diff-cell diff-after-cell"><span class="diff-check">✓</span> 5 pinned repos, one clear story</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-before-cell"><span class="diff-x">✗</span> Repos: "project-1", gibberish names</div>
+      <div class="diff-cell diff-after-cell"><span class="diff-check">✓</span> Descriptive names + topic tags + metrics</div>
+    </div>
+    <div class="diff-row">
+      <div class="diff-cell diff-before-cell"><span class="diff-x">✗</span> No README, no social links</div>
+      <div class="diff-cell diff-after-cell"><span class="diff-check">✓</span> Full README + LinkedIn + HuggingFace</div>
+    </div>
+    <div class="diff-row" style="border-bottom:none">
+      <div class="diff-cell diff-before-cell"><span class="diff-x">✗</span> Invisible to recruiters</div>
+      <div class="diff-cell diff-after-cell"><span class="diff-check">✓</span> "Available for hire" · open to remote</div>
+    </div>
+  </div>
+</div>
