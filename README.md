@@ -7,7 +7,6 @@ Went from zero profile views to recruiter DMs in under a week. Here's exactly wh
 
 ---
 ![Before vs After](./assets/before-after.png)
-
 ## 📸 Before vs After
 
 | Before | After |
