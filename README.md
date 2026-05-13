@@ -6,6 +6,7 @@ Built by [Arman Adil Mangat](https://github.com/ArmanAdilMangat) — AI/ML Engin
 Went from zero profile views to recruiter DMs in under a week. Here's exactly what I changed.
 
 ---
+![Before vs After](./before-after.png)
 
 ## 📸 Before vs After
 
